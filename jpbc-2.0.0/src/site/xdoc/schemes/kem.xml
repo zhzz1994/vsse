@@ -12,17 +12,17 @@
 
             <p>
                 [Wikipedia] Key encapsulation mechanisms (KEMs) are a class of
-                encryption techniques designed to secure symmetric cryptographic key material for transmission using
-                asymmetric (public-key) algorithms. In practice, public key systems are clumsy to use in transmitting
+                encryption techniques designed to secure symmetric cryptographic sk material for transmission using
+                asymmetric (public-sk) algorithms. In practice, public sk systems are clumsy to use in transmitting
                 long messages. Instead they are often used to exchange symmetric keys, which are relatively short.
-                The symmetric key is then used to encrypt the longer message.
+                The symmetric sk is then used to encrypt the longer message.
 
-                The traditional approach to sending a symmetric key with public key systems is to first generate a
-                random symmetric key and then encrypt it using the chosen public key algorithm. The recipient then
-                decrypts the public key message to recover the symmetric key. As the symmetric key is generally short,
+                The traditional approach to sending a symmetric sk with public sk systems is to first generate a
+                random symmetric sk and then encrypt it using the chosen public sk algorithm. The recipient then
+                decrypts the public sk message to recover the symmetric sk. As the symmetric sk is generally short,
                 padding is required for full security and proofs of security for padding schemes are often less than
                 complete. KEMs simplify the process by generating a random element in the finite group
-                underlying the public key system and deriving the symmetric key by hashing that element, eliminating
+                underlying the public sk system and deriving the symmetric sk by hashing that element, eliminating
                 the need for padding.
             </p>
 

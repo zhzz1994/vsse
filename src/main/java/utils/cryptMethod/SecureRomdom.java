@@ -24,13 +24,4 @@ public class SecureRomdom {
         byte[] byte256 = GeneralHash.Hash(GeneralHash.HashMode.SHA256,seed);
         return Arrays.copyOfRange(byte256,0,len/8);
     }
-
-
-
-
-
-
-
-
-
 }

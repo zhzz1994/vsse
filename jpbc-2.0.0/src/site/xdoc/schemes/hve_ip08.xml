@@ -16,14 +16,14 @@
             <subsection name="Abstract">
                 Predicate encryption schemes are encryption schemes in which
                 each ciphertext Ct is associated with a binary attribute vector
-                x = (x1, ..., xn) and keys K are associated with predicates. A key K can
+                x = (x1, ..., xn) and keys K are associated with predicates. A sk K can
                 decrypt a ciphertext Ct if and only if the attribute vector of the
-                cipher-text satisfies the predicate of the key. Predicate encryption schemes can
+                cipher-text satisfies the predicate of the sk. Predicate encryption schemes can
                 be used to implement fine-grained access control on encrypted data and
                 to perform search on encrypted data.
                 Hidden vector encryption schemes [Boneh and Waters - TCC 2007] are
                 encryption schemes in which each ciphertext Ct is associated with a
-                binary vector x = (x1, ..., xn) and each key K is associated with binary
+                binary vector x = (x1, ..., xn) and each sk K is associated with binary
                 vector y = (y1, ..., yn) with "don't care" entries (denoted with *). Key
                 K can decrypt ciphertext Ct if and only if x and y agree for all i for
                 which yi != *.

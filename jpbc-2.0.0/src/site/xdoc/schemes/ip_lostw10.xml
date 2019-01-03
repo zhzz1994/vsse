@@ -29,7 +29,7 @@
                 inner-product predicates. As for ABE, previous constructions of such schemes were only proven to be
                 selectively secure. Security is proven under a non-interactive assumption whose size does not depend on
                 the number of queries. The scheme is comparably efficient to existing selectively secure schemes. We
-                also present a fully secure hierarchical PE scheme under the same assumption. The key technique used to
+                also present a fully secure hierarchical PE scheme under the same assumption. The sk technique used to
                 obtain these results is an elaborate combination of the dual system encryption methodology (adapted to
                 the structure of inner product PE systems) and a new approach on bilinear pairings using the notion of
                 dual pairing vector spaces (DPVS) proposed by Okamoto and Takashima.

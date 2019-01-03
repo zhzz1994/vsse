@@ -27,7 +27,7 @@ package it.unisa.dia.gas.plaf.jpbc.util.io;
  * <code>String encoded = Base64.encodeBytes( mybytes, Base64.GZIP | Base64.DO_BREAK_LINES );</code>
  * <p>to compress the data before encoding it and then making the output have newline characters.</p>
  * <p>Also...</p>
- * <code>String encoded = Base64.encodeBytes( crazyString.getBytes() );</code>
+ * <code>String encoded = Base64.encodeBytes( crazyString.getUiBytes() );</code>
  *
  *
  *

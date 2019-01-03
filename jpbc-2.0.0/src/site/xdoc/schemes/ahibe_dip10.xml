@@ -21,11 +21,11 @@
                 assumptions formulated in composite order bilinear groups.
 
                 In addition, we present a
-                fully secure Anonymous IBE in the secret-key setting.
+                fully secure Anonymous IBE in the secret-sk setting.
                 Secret-Key Anonymous IBE was implied by the work of
                 [Shen-Shi-Waters - TCC 2009] which can be shown secure
                 in the selective-id model.
-                No previous fully secure construction of secret-key Anonymous IBE is known.
+                No previous fully secure construction of secret-sk Anonymous IBE is known.
             </subsection>
 
             <subsection name="URL">
@@ -118,10 +118,10 @@
 <a name="l78"><span class="ln">78   </span></a>            assertNotNull(ciphertext);
 <a name="l79"><span class="ln">79   </span></a>            assertNotSame(</span><span class="s4">0</span><span class="s1">, ciphertext.length);
 <a name="l80"><span class="ln">80   </span></a>
-<a name="l81"><span class="ln">81   </span></a>            </span><span class="s0">byte</span><span class="s1">[] key = Arrays.copyOfRange(ciphertext, </span><span class="s4">0</span><span class="s1">, kem.getKeyBlockSize());
+<a name="l81"><span class="ln">81   </span></a>            </span><span class="s0">byte</span><span class="s1">[] sk = Arrays.copyOfRange(ciphertext, </span><span class="s4">0</span><span class="s1">, kem.getKeyBlockSize());
 <a name="l82"><span class="ln">82   </span></a>            </span><span class="s0">byte</span><span class="s1">[] ct = Arrays.copyOfRange(ciphertext, kem.getKeyBlockSize(), ciphertext.length);
 <a name="l83"><span class="ln">83   </span></a>
-<a name="l84"><span class="ln">84   </span></a>            </span><span class="s0">return new byte</span><span class="s1">[][]{key, ct};
+<a name="l84"><span class="ln">84   </span></a>            </span><span class="s0">return new byte</span><span class="s1">[][]{sk, ct};
 <a name="l85"><span class="ln">85   </span></a>        } </span><span class="s0">catch </span><span class="s1">(InvalidCipherTextException e) {
 <a name="l86"><span class="ln">86   </span></a>            e.printStackTrace();
 <a name="l87"><span class="ln">87   </span></a>            fail(e.getMessage());
@@ -134,12 +134,12 @@
 <a name="l94"><span class="ln">94   </span></a>            KeyEncapsulationMechanism kem = </span><span class="s0">new </span><span class="s1">AHIBEDIP10KEMEngine();
 <a name="l95"><span class="ln">95   </span></a>
 <a name="l96"><span class="ln">96   </span></a>            kem.init(</span><span class="s0">false</span><span class="s1">, secretKey);
-<a name="l97"><span class="ln">97   </span></a>            </span><span class="s0">byte</span><span class="s1">[] key = kem.processBlock(cipherText);
+<a name="l97"><span class="ln">97   </span></a>            </span><span class="s0">byte</span><span class="s1">[] sk = kem.processBlock(cipherText);
 <a name="l98"><span class="ln">98   </span></a>
-<a name="l99"><span class="ln">99   </span></a>            assertNotNull(key);
-<a name="l100"><span class="ln">100  </span></a>            assertNotSame(</span><span class="s4">0</span><span class="s1">, key.length);
+<a name="l99"><span class="ln">99   </span></a>            assertNotNull(sk);
+<a name="l100"><span class="ln">100  </span></a>            assertNotSame(</span><span class="s4">0</span><span class="s1">, sk.length);
 <a name="l101"><span class="ln">101  </span></a>
-<a name="l102"><span class="ln">102  </span></a>            </span><span class="s0">return </span><span class="s1">key;
+<a name="l102"><span class="ln">102  </span></a>            </span><span class="s0">return </span><span class="s1">sk;
 <a name="l103"><span class="ln">103  </span></a>        } </span><span class="s0">catch </span><span class="s1">(InvalidCipherTextException e) {
 <a name="l104"><span class="ln">104  </span></a>            e.printStackTrace();
 <a name="l105"><span class="ln">105  </span></a>            fail(e.getMessage());

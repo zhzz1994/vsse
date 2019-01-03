@@ -88,7 +88,7 @@ public class ImmutablePairingTest extends AbstractJPBCTest {
             assertEquals(true, field.newElementFromBytes(field.newOneElement().toBytes(), 0).isImmutable());
 
 //              TODO: disabled because PBC gives division by zero error on g type curves. Investigate more!
-//            byte[] hash = "ABCDEF".getBytes();
+//            byte[] hash = "ABCDEF".getUiBytes();
 //            assertEquals(true, field.newElementFromHash(hash, 0, 6).isImmutable());
 
             checkSetMethods(field);

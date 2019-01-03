@@ -12,11 +12,5 @@ public class OreSkTest {
 
     @Test
     public void testSetRomdomseed() {
-        OreSk sk = new OreSk(128);
-        System.out.println(Arrays.toString(sk.getK1()));
-        System.out.println(Arrays.toString(sk.getK2()));
-        sk.setRomdomseed(50);
-        System.out.println(Arrays.toString(sk.getK1()));
-        System.out.println(Arrays.toString(sk.getK2()));
     }
 }
