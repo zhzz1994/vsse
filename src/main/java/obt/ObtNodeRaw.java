@@ -19,4 +19,10 @@ public class ObtNodeRaw extends ObtNode {
     public void update() {
         //无需更新
     }
+
+    @Override
+    public ObtNodeRaw copy() {
+        ObtNodeRaw node = new ObtNodeRaw(tree);
+        return node;
+    }
 }

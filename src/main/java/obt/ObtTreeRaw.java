@@ -6,9 +6,10 @@ package obt;
  */
 public class ObtTreeRaw extends ObtTree {
     @Override
-    public Bnode createNode() {
-        Bnode node = new ObtNodeRaw(this);
+    public ObtNode createNode() {
+        ObtNode node = new ObtNodeRaw(this);
         node.setLeaf(true);
         return node;
     }
+
 }

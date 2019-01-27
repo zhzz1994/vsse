@@ -44,6 +44,7 @@ public class ObtNodeMTest {
         System.out.println(obtTree.getHight());
     }
 
+    @Test
     public void merkleTest(){
         Timer timer = new Timer();
         ObtTree obtTree = new ObtTreeM();
@@ -56,12 +57,6 @@ public class ObtNodeMTest {
         }
         System.out.println(timer.stop(0));
         System.out.println(obtTree.getHight());
-
-
-
-
-
-
     }
 
     @Test
@@ -105,20 +100,56 @@ public class ObtNodeMTest {
         ObtTree obtTree = new ObtTreeM();
         ORE ore = ORE.getDefaltORE();
         timer.start(0);
+        int n;
         for (int i = 0; i < 400 ; i ++) {
-            int n = ( i * 19 ) % (3*7*11*17*23);
+            n = ( i * 19 ) % (3*7*11*17*23);
             CmpOre add = new CmpOre(n,ore);
             obtTree.insert(add);
         }
         System.out.println("********************");
         System.out.println("********************");
-        int n = ( 4 * 19 ) % (3*7*11*17*23);
+        n = ( 4 * 19 ) % (3*7*11*17*23);
         ObtNode find = obtTree.find(new CmpOre(n,ore));
         MerkleHashPath path = MerkleHashPath.createMerkleHashPath((ObtNodeM) find);
         System.out.println(path.verify((ObtNodeM) find));
+        for (int i = 3; i < 397 ; i ++) {
+            n = ( i * 19 ) % (3*7*11*17*23);
+            obtTree.delete(new CmpOre(n,ore));
+        }
+        n = ( 19 * 356 ) % (3*7*11*17*23);
+        find = obtTree.find(new CmpOre(n,ore));
+        path = MerkleHashPath.createMerkleHashPath((ObtNodeM) find);
+        System.out.println(path.verify((ObtNodeM) find));
     }
 
-
+    @Test
+    public void cloneNodeTest(){
+        Timer timer = new Timer();
+        ObtTree obtTree = new ObtTreeM();
+        ORE ore = ORE.getDefaltORE();
+        timer.start(0);
+        int n;
+        for (int i = 0; i < 400 ; i ++) {
+            n = ( i * 19 ) % (3*7*11*17*23);
+            CmpOre add = new CmpOre(n,ore);
+            obtTree.insert(add);
+        }
+        System.out.println("********************");
+        System.out.println("********************");
+        n = ( 4 * 19 ) % (3*7*11*17*23);
+        ObtNode find = obtTree.find(new CmpOre(n,ore));
+        MerkleHashPath path = MerkleHashPath.createMerkleHashPath((ObtNodeM) find);
+        ObtNode findc = find.copy();
+        System.out.println(path.verify((ObtNodeM) find));
+        for (int i = 3; i < 337 ; i ++) {
+            n = ( i * 19 ) % (3*7*11*17*23);
+            obtTree.delete(new CmpOre(n,ore));
+        }
+        n = ( 19 * 356 ) % (3*7*11*17*23);
+        find = obtTree.find(new CmpOre(n,ore));
+        path = MerkleHashPath.createMerkleHashPath((ObtNodeM) find);
+        System.out.println(path.verify((ObtNodeM) find));
+    }
 
 
 
@@ -152,6 +183,4 @@ public class ObtNodeMTest {
             eqHash(nodeM);
         }
     }
-
-
 }

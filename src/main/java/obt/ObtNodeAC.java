@@ -15,4 +15,12 @@ public class ObtNodeAC extends ObtNodeM {
     public void update() {
         super.update();
     }
+
+    @Override
+    public ObtNodeAC copy() {
+        ObtNodeAC node = new ObtNodeAC(tree);
+        node.mHash = getMHash();
+        node.accEnc = accEnc;
+        return node;
+    }
 }

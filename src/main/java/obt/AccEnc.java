@@ -55,7 +55,7 @@ public class AccEnc {
     }
 
     public byte[] getAccEnc() {
-        return accEnc;
+        return accEnc == null ? new byte[0] : accEnc;
     }
 
     public void setAccEnc(byte[] accEnc) {

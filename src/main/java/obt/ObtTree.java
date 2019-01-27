@@ -1,8 +1,7 @@
 package obt;
 
-import ore.CmpOre;
-
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhzz
@@ -11,22 +10,32 @@ import java.util.Arrays;
 public abstract class ObtTree {
     //B+树
     private ObtNode root;
-    private int n = 5;    // 结点容量
-    private int hight = 0;
+    private int n;    // 结点容量
+    private int hight;
+
+    ChangeRecord changeRecord;
+
+    ObtTree(){
+        n = 5;
+        hight = 0;
+        changeRecord = ChangeRecord.createRecord();
+    }
 
     public ChangeProof insert(CmpItem item){
-        Bnode find;
+        ObtNode find;
         if(getRoot() == null){
             find = createNode();
         }else {
             find = getRoot().find(item);
         }
         find.insert(item);
+        changeRecord.updateRecords();
+        changeRecord = ChangeRecord.createRecord();
         return null;
     }
 
     public ChangeProof delete(CmpItem item){
-        Bnode find;
+        ObtNode find;
         if(getRoot() != null){
             find = getRoot().find(item);
             //pkeys();
@@ -36,11 +45,13 @@ public abstract class ObtTree {
                 System.out.println("can`t find it");
             }
         }
+        changeRecord.updateRecords();
+        changeRecord = ChangeRecord.createRecord();
         return null;
     }
 
     public SearchProof search(CmpItem item){
-        Bnode find = getRoot().find(item);
+        ObtNode find = getRoot().find(item);
         return null;
     }
 
@@ -58,7 +69,7 @@ public abstract class ObtTree {
     }
 
     //工厂方法模式
-    public abstract Bnode createNode();
+    public abstract ObtNode createNode();
 
     public ObtNode getRoot(){
         return root;
@@ -90,5 +101,13 @@ public abstract class ObtTree {
 
     void decHight(){
         this.hight --;
+    }
+
+    public ChangeRecord getChangeRecord() {
+        return changeRecord;
+    }
+
+    public void setChangeRecord(ChangeRecord changeRecord) {
+        this.changeRecord = changeRecord;
     }
 }

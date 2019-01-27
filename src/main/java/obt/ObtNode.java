@@ -1,22 +1,19 @@
 package obt;
 
-import ore.CmpOre;
-
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
  * @author zhzz
  * @Data create in 14:57 2019/1/10
  */
-public abstract class ObtNode implements Bnode {
+public abstract class ObtNode{
     protected LinkedList<CmpItem> keys;
     // key 指键值对中 键，即为 标志 ，并非密钥含义
     //sons[0]  < keys [0]
     protected LinkedList<ObtNode> sons;
     protected ObtNode parent;
-    protected ObtNode Orderleft;
-    protected ObtNode Orderright;
+    private ObtNode Orderleft;
+    private ObtNode Orderright;
     protected boolean isLeaf;
     protected ObtTree tree;
 
@@ -26,8 +23,7 @@ public abstract class ObtNode implements Bnode {
         this.tree = tree;
     }
 
-    @Override
-    public Bnode find(CmpItem item){
+    public ObtNode find(CmpItem item){
         if(isLeaf) return this;
         for (int i = 0; i < keys.size(); i++) {
             if(item.isSmallerThan(keys.get(i))){
@@ -37,7 +33,6 @@ public abstract class ObtNode implements Bnode {
         return sons.get(sons.size() - 1).find(item);
     }
 
-    @Override
     public void insert(CmpItem item){
         int keySize = keys.size();
         if(keySize != 0){
@@ -55,9 +50,12 @@ public abstract class ObtNode implements Bnode {
         }
     }
 
-    @Override
     public void delete(CmpItem item) {
         int keySize = keys.size();
+
+        NodePair before = NodePair.createCopyNodePair(this);
+        tree.getChangeRecord().setBefore(before);
+
         for (int i = 0; i < keySize; i++) {
             if(item.isEqualWith(keys.get(i))){
                 keys.remove(i);
@@ -67,37 +65,62 @@ public abstract class ObtNode implements Bnode {
         if(keys.size() < tree.getNodeMinSize()){
             borrowOrMerge();
         }else {
-            ObtNode saved = this;
-            while (saved != null){
-                saved.update();
-                saved = saved.parent;
-            }
+            NodePair after = NodePair.createNodePair(this);
+            tree.getChangeRecord().normalDelete(after);
         }
     }
 
     //合并结点，先尝试向兄弟结点借一个子节点，若其无法借出，则尝试与兄弟结点合并
     //可以看做devide方法的逆过程
     private void borrowOrMerge(){
-        if(isBrother(Orderleft) && Orderleft.keys.size() > tree.getNodeMinSize()){
-            borrowFromLeft();
-        }else if(isBrother(Orderright) && Orderright.keys.size() > tree.getNodeMinSize()){
-            borrowFromRight();
-        }else if(isBrother(Orderleft)){
-            merge(Orderleft,this);
-        }else if(isBrother(Orderright)){
-            merge(this,Orderright);
-        }
-        if(this == tree.getRoot() && keys.size() == 0){
-            ObtNode root = this.sons.size() == 0 ? null : this.sons.getFirst();
-            tree.setRoot(root);
-            tree.decHight();
-        }else if(this != tree.getRoot() && parent.keys.size() < tree.getNodeMinSize()){
-            parent.borrowOrMerge();
+        if(this == tree.getRoot()){
+            if(keys.size() == 0){
+                ObtNode root = this.sons.size() == 0 ? null : this.sons.getFirst();
+                tree.setRoot(root);
+                tree.decHight();
+            }else {
+                NodePair after = NodePair.createNodePair(this);
+                tree.getChangeRecord().normalDelete(after);
+            }
         }else {
-            ObtNode saved = this;
-            while (saved != null){
-                saved.update();
-                saved = saved.parent;
+            if(isBrother(Orderleft) && Orderleft.keys.size() > tree.getNodeMinSize()){
+                tree.getChangeRecord().setBeforeAppendBro(Orderleft);
+
+                borrowFromLeft();
+
+                NodePair after = NodePair.createNodePair(this,Orderleft);
+                tree.getChangeRecord().borrowLeft(after);
+            }else if(isBrother(Orderright) && Orderright.keys.size() > tree.getNodeMinSize()){
+                tree.getChangeRecord().setBeforeAppendBro(Orderright);
+
+                borrowFromRight();
+
+                NodePair after = NodePair.createNodePair(this,Orderright);
+                tree.getChangeRecord().borrowRight(after);
+            }else if(isBrother(Orderleft)){
+                tree.getChangeRecord().setBeforeAppendBro(Orderleft);
+
+                merge(Orderleft,this);
+
+                NodePair after = NodePair.createNodePair(Orderleft);
+                tree.getChangeRecord().mergeLeft(after);
+            }else if(isBrother(Orderright)){
+                tree.getChangeRecord().setBeforeAppendBro(Orderright);
+
+                merge(this,Orderright);
+
+                NodePair after = NodePair.createNodePair(this);
+                tree.getChangeRecord().mergeRight(after);
+            }
+
+            if(parent.keys.size() < tree.getNodeMinSize()){
+                NodePair before = NodePair.createCopyNodePair(this);
+                tree.getChangeRecord().setBefore(before);
+
+                parent.borrowOrMerge();
+            }else {
+                NodePair after = NodePair.createNodePair(this);
+                tree.getChangeRecord().normalDelete(after);
             }
         }
     }
@@ -115,10 +138,11 @@ public abstract class ObtNode implements Bnode {
         left.parent.keys.remove(index);
         setOrder(left,right.Orderright);
         left.parent.sons.remove(right);
-        left.update();
     }
 
     private void borrowFromLeft() {
+
+
         int index = parent.sons.indexOf(Orderleft);
         CmpItem moved = Orderleft.keys.getLast();
         Orderleft.keys.remove(moved);
@@ -133,8 +157,6 @@ public abstract class ObtNode implements Bnode {
             this.keys.add(0,moved);
             parent.keys.set(index,keys.getFirst());
         }
-        this.update();
-        Orderleft.update();
     }
 
     private void borrowFromRight() {
@@ -152,8 +174,6 @@ public abstract class ObtNode implements Bnode {
             this.keys.add(moved);
             parent.keys.set(index,Orderright.keys.getFirst());
         }
-        this.update();
-        Orderright.update();
     }
 
     private boolean isBrother(ObtNode node){
@@ -166,6 +186,10 @@ public abstract class ObtNode implements Bnode {
             tree.setRoot(this);
             tree.incHight();
         }
+
+        NodePair before = NodePair.createCopyNodePair(this);
+        tree.getChangeRecord().setBefore(before);
+
         keys.add(pos,item);
         if(left != null && right != null){
             left.parent = this;
@@ -175,11 +199,15 @@ public abstract class ObtNode implements Bnode {
         }
         if(keys.size() >= tree.getN()){   //结点存储量大于限定值，n阶B+树中任意结点最大为n-1，即5阶B+数最多存储4个值，故用>=符号而不是>符号
             devide();
-        }
-        ObtNode saved = this;
-        while (saved != null){
-            saved.update();
-            saved = saved.parent;
+        }else {
+            NodePair after = NodePair.createNodePair(this);
+            tree.getChangeRecord().normalInsert(after);
+
+//            ObtNode saved = this;
+//            while (saved != null){
+//                saved.update();
+//                saved = saved.parent;
+//            }
         }
     }
 
@@ -197,8 +225,8 @@ public abstract class ObtNode implements Bnode {
         setOrder(Orderleft,left);
         setOrder(right,Orderright);
 
-        left.update();
-        right.update();
+        NodePair after = NodePair.createNodePair(left,right);
+        tree.getChangeRecord().devide(after);
 
         if (this == tree.getRoot()){
             ObtNode root = createNode();
@@ -253,12 +281,10 @@ public abstract class ObtNode implements Bnode {
         }
     }
 
-    @Override
     public void setLeaf(boolean leaf) {
         isLeaf = leaf;
     }
 
-    @Override
     public boolean contains(CmpItem item) {
         if(isLeaf){
             for (CmpItem key : keys) {
@@ -287,4 +313,6 @@ public abstract class ObtNode implements Bnode {
     public abstract ObtNode createNode();
 
     public abstract void update();
+
+    public abstract ObtNode copy();
 }

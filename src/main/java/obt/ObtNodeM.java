@@ -12,7 +12,7 @@ import static utils.DataTools.bytesConjunction;
  */
 public class ObtNodeM extends ObtNode {
 
-    private byte[] mHash;
+    protected byte[] mHash;
 
     ObtNodeM(ObtTree tree) {
         super(tree);
@@ -39,6 +39,13 @@ public class ObtNodeM extends ObtNode {
             }
             mHash = GeneralHash.Hash(GeneralHash.HashMode.SHA256,con);
         }
+    }
+
+    @Override
+    public ObtNodeM copy() {
+        ObtNodeM node = new ObtNodeM(tree);
+        node.mHash = getMHash();
+        return node;
     }
 
     public byte[] getMHash() {

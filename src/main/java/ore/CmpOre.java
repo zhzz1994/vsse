@@ -27,6 +27,7 @@ public class CmpOre implements CmpItem {
         ctL = ore.encNumCtL(i);
         ctR = ore.encNumCtR(i);
         this.ore = ore;
+        accEnc = new AccEnc();
     }
 
     @Override
@@ -72,10 +73,6 @@ public class CmpOre implements CmpItem {
     @Override
     public String toString() {
         return "" + i;
-    }
-
-    public void setAccEnc(AccEnc accEnc) {
-        this.accEnc = accEnc;
     }
 
     public void initAccEnc() {
